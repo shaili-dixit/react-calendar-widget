@@ -1,19 +1,14 @@
 import { useState } from "react";
 
-function CalendarWidget() {
+function CalendarWidget({ selectedDate, setSelectedDate }) {
   const today = new Date();
 
   const [currentMonth, setCurrentMonth] = useState(today.getMonth());
   const [currentYear, setCurrentYear] = useState(today.getFullYear());
-  const [selectedDate, setSelectedDate] = useState(today.getDate());
 
   const firstDay = new Date(currentYear, currentMonth, 1).getDay();
 
-  const daysInMonth = new Date(
-    currentYear,
-    currentMonth + 1,
-    0
-  ).getDate();
+  const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
 
   const prevMonth = () => {
     if (currentMonth === 0) {
@@ -33,27 +28,35 @@ function CalendarWidget() {
     }
   };
 
-  const monthName = new Date(
-    currentYear,
-    currentMonth
-  ).toLocaleString("default", {
-    month: "long",
-  });
+  const monthName = new Date(currentYear, currentMonth).toLocaleString(
+    "default",
+    {
+      month: "long",
+    }
+  );
 
   const cells = [];
 
+  // Empty cells before first day
   for (let i = 0; i < firstDay; i++) {
-    cells.push(<div key={"empty" + i}></div>);
+    cells.push(<div key={`empty-${i}`}></div>);
   }
 
+  // Calendar days
   for (let day = 1; day <= daysInMonth; day++) {
+    const currentDate = new Date(currentYear, currentMonth, day);
+
+    const isSelected =
+      selectedDate.getDate() === day &&
+      selectedDate.getMonth() === currentMonth &&
+      selectedDate.getFullYear() === currentYear;
+
     cells.push(
       <button
         key={day}
-        className={
-          selectedDate === day ? "day selected" : "day"
-        }
-        onClick={() => setSelectedDate(day)}
+        className={isSelected ? "day selected" : "day"}
+        onClick={() => setSelectedDate(currentDate)}
+        aria-label={`Select ${day} ${monthName}`}
       >
         {day}
       </button>
@@ -62,10 +65,8 @@ function CalendarWidget() {
 
   return (
     <div className="calendar-container">
-
       <div className="calendar-header">
-
-        <button onClick={prevMonth}>
+        <button onClick={prevMonth} aria-label="Previous Month">
           ◀
         </button>
 
@@ -73,10 +74,9 @@ function CalendarWidget() {
           {monthName} {currentYear}
         </h2>
 
-        <button onClick={nextMonth}>
+        <button onClick={nextMonth} aria-label="Next Month">
           ▶
         </button>
-
       </div>
 
       <div className="weekdays">
@@ -89,18 +89,12 @@ function CalendarWidget() {
         <div>Sat</div>
       </div>
 
-      <div className="calendar-grid">
-        {cells}
-      </div>
+      <div className="calendar-grid">{cells}</div>
 
       <div className="selected-info">
         Selected Date:
-        <strong>
-          {" "}
-          {selectedDate} {monthName} {currentYear}
-        </strong>
+        <strong> {selectedDate.toDateString()}</strong>
       </div>
-
     </div>
   );
 }
