@@ -1,102 +1,174 @@
 import { useState } from "react";
 
-function CalendarWidget({ selectedDate, setSelectedDate }) {
+function CalendarWidget({
+  selectedDate,
+  setSelectedDate,
+  appointments,
+}) {
+
   const today = new Date();
 
-  const [currentMonth, setCurrentMonth] = useState(today.getMonth());
-  const [currentYear, setCurrentYear] = useState(today.getFullYear());
+  const [currentMonth,setCurrentMonth]=useState(today.getMonth());
 
-  const firstDay = new Date(currentYear, currentMonth, 1).getDay();
+  const [currentYear,setCurrentYear]=useState(today.getFullYear());
 
-  const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
+  const firstDay=new Date(
+    currentYear,
+    currentMonth,
+    1
+  ).getDay();
 
-  const prevMonth = () => {
-    if (currentMonth === 0) {
+  const daysInMonth=new Date(
+    currentYear,
+    currentMonth+1,
+    0
+  ).getDate();
+
+  const monthName=new Date(
+    currentYear,
+    currentMonth
+  ).toLocaleString("default",{
+    month:"long"
+  });
+
+  const prevMonth=()=>{
+
+    if(currentMonth===0){
+
       setCurrentMonth(11);
-      setCurrentYear(currentYear - 1);
-    } else {
-      setCurrentMonth(currentMonth - 1);
+
+      setCurrentYear(currentYear-1);
+
+    }else{
+
+      setCurrentMonth(currentMonth-1);
+
     }
+
   };
 
-  const nextMonth = () => {
-    if (currentMonth === 11) {
+  const nextMonth=()=>{
+
+    if(currentMonth===11){
+
       setCurrentMonth(0);
-      setCurrentYear(currentYear + 1);
-    } else {
-      setCurrentMonth(currentMonth + 1);
+
+      setCurrentYear(currentYear+1);
+
+    }else{
+
+      setCurrentMonth(currentMonth+1);
+
     }
+
   };
 
-  const monthName = new Date(currentYear, currentMonth).toLocaleString(
-    "default",
-    {
-      month: "long",
-    }
-  );
+  const cells=[];
 
-  const cells = [];
+  for(let i=0;i<firstDay;i++){
 
-  // Empty cells before first day
-  for (let i = 0; i < firstDay; i++) {
-    cells.push(<div key={`empty-${i}`}></div>);
+    cells.push(<div key={"e"+i}></div>);
+
   }
 
-  // Calendar days
-  for (let day = 1; day <= daysInMonth; day++) {
-    const currentDate = new Date(currentYear, currentMonth, day);
+  for(let day=1;day<=daysInMonth;day++){
 
-    const isSelected =
-      selectedDate.getDate() === day &&
-      selectedDate.getMonth() === currentMonth &&
-      selectedDate.getFullYear() === currentYear;
+    const currentDate=new Date(
+      currentYear,
+      currentMonth,
+      day
+    );
+
+    const formatted=currentDate.toDateString();
+
+    const hasAppointment=appointments.some(
+      item=>item.date===formatted
+    );
+
+    const isToday=
+      day===today.getDate() &&
+      currentMonth===today.getMonth() &&
+      currentYear===today.getFullYear();
+
+    const isSelected=
+      day===selectedDate.getDate() &&
+      currentMonth===selectedDate.getMonth() &&
+      currentYear===selectedDate.getFullYear();
 
     cells.push(
+
       <button
         key={day}
-        className={isSelected ? "day selected" : "day"}
-        onClick={() => setSelectedDate(currentDate)}
-        aria-label={`Select ${day} ${monthName}`}
+        className={`day ${isSelected?"selected":""} ${isToday?"today":""}`}
+        onClick={()=>setSelectedDate(currentDate)}
       >
+
         {day}
+
+        {hasAppointment &&
+          <span className="appointment-dot"></span>
+        }
+
       </button>
+
     );
+
   }
 
-  return (
-    <div className="calendar-container">
-      <div className="calendar-header">
-        <button onClick={prevMonth} aria-label="Previous Month">
-          ◀
-        </button>
+  return(
 
-        <h2>
-          {monthName} {currentYear}
-        </h2>
+<div className="calendar-container">
 
-        <button onClick={nextMonth} aria-label="Next Month">
-          ▶
-        </button>
-      </div>
+<div className="calendar-header">
 
-      <div className="weekdays">
-        <div>Sun</div>
-        <div>Mon</div>
-        <div>Tue</div>
-        <div>Wed</div>
-        <div>Thu</div>
-        <div>Fri</div>
-        <div>Sat</div>
-      </div>
+<button onClick={prevMonth}>◀</button>
 
-      <div className="calendar-grid">{cells}</div>
+<h2>
 
-      <div className="selected-info">
-        Selected Date:
-        <strong> {selectedDate.toDateString()}</strong>
-      </div>
-    </div>
-  );
+{monthName} {currentYear}
+
+</h2>
+
+<button onClick={nextMonth}>▶</button>
+
+</div>
+
+<div className="weekdays">
+
+<div>Sun</div>
+<div>Mon</div>
+<div>Tue</div>
+<div>Wed</div>
+<div>Thu</div>
+<div>Fri</div>
+<div>Sat</div>
+
+</div>
+
+<div className="calendar-grid">
+
+{cells}
+
+</div>
+
+<div className="selected-info">
+
+Selected Date
+
+<br/>
+
+<strong>
+
+{selectedDate.toDateString()}
+
+</strong>
+
+</div>
+
+</div>
+
+);
+
 }
 
 export default CalendarWidget;

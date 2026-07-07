@@ -4,28 +4,33 @@ function AppointmentCard({
 }) {
   return (
     <div className="appointment-card">
-      <h3>{appointment.patient}</h3>
 
-      <p>
-        <strong>Doctor:</strong> {appointment.doctor}
-      </p>
+      <div className="appointment-info">
 
-      <p>
-        <strong>Time:</strong> {appointment.time}
-      </p>
+        <h3>👤 {appointment.patient}</h3>
 
-      <p>
-        <strong>Treatment:</strong> {appointment.purpose}
-      </p>
+        <p>
+          <strong>🦷 Doctor:</strong> {appointment.doctor}
+        </p>
+
+        <p>
+          <strong>🕒 Time:</strong> {appointment.time}
+        </p>
+
+        <p>
+          <strong>📝 Treatment:</strong> {appointment.purpose}
+        </p>
+
+      </div>
 
       <button
         className="delete-btn"
-        onClick={() =>
-          deleteAppointment(appointment.id)
-        }
+        onClick={() => deleteAppointment(appointment.id)}
+        aria-label="Delete Appointment"
       >
-        Delete
+        🗑 Delete
       </button>
+
     </div>
   );
 }

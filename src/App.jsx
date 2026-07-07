@@ -6,88 +6,87 @@ import Loader from "./components/Loader";
 import "./styles.css";
 
 function App() {
-
   const [selectedDate, setSelectedDate] = useState(new Date());
-
   const [appointments, setAppointments] = useState([]);
-
   const [loading, setLoading] = useState(true);
-
   const [initialized, setInitialized] = useState(false);
 
   useEffect(() => {
-
     const savedAppointments =
       JSON.parse(localStorage.getItem("appointments")) || [];
 
     setTimeout(() => {
-
       setAppointments(savedAppointments);
-
       setLoading(false);
-
       setInitialized(true);
-
     }, 1000);
-
   }, []);
 
   useEffect(() => {
-
     if (!initialized) return;
 
     localStorage.setItem(
       "appointments",
       JSON.stringify(appointments)
     );
-
   }, [appointments, initialized]);
 
   const addAppointment = (appointment) => {
-
     console.log(
       "[Analytics] User interacted with React Calendar Widget"
     );
 
     setAppointments((prev) => [...prev, appointment]);
-
   };
 
   const deleteAppointment = (id) => {
-
     setAppointments((prev) =>
       prev.filter((item) => item.id !== id)
     );
-
   };
 
   if (loading) {
-
     return <Loader />;
-
   }
 
   return (
-
     <div className="app">
 
-      <header className="header">
+      <header className="hero-header">
 
-        <h1>Dentist Schedule Calendar</h1>
+        <div>
 
-        <p>Manage appointments efficiently</p>
+          <h1>🦷 Dental Appointment Scheduler</h1>
+
+          <p>
+            Manage patient appointments with a modern scheduling dashboard.
+          </p>
+
+        </div>
+
+        <div className="today-box">
+
+          <span>📅 Today</span>
+
+          <h3>{new Date().toDateString()}</h3>
+
+        </div>
 
       </header>
 
-      <CalendarWidget
-        selectedDate={selectedDate}
-        setSelectedDate={setSelectedDate}
-      />
+      <div className="dashboard">
 
-      <AppointmentForm
-        selectedDate={selectedDate}
-        addAppointment={addAppointment}
-      />
+        <CalendarWidget
+          selectedDate={selectedDate}
+          setSelectedDate={setSelectedDate}
+        />
+
+        <AppointmentForm
+          selectedDate={selectedDate}
+          addAppointment={addAppointment}
+        />
+
+      </div>
 
       <AppointmentList
         appointments={appointments}
@@ -95,10 +94,14 @@ function App() {
         deleteAppointment={deleteAppointment}
       />
 
+      <footer className="footer">
+
+        © 2026 Dental Appointment Scheduler
+
+      </footer>
+
     </div>
-
   );
-
 }
 
 export default App;
