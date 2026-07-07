@@ -1,82 +1,131 @@
 import { useState } from "react";
 
 function AppointmentForm({ selectedDate, addAppointment }) {
-  const [patient, setPatient] = useState("");
-  const [doctor, setDoctor] = useState("");
-  const [time, setTime] = useState("");
-  const [purpose, setPurpose] = useState("");
 
-  const submit = (e) => {
+  const [patient,setPatient]=useState("");
+  const [doctor,setDoctor]=useState("");
+  const [time,setTime]=useState("");
+  const [purpose,setPurpose]=useState("");
+
+  const [errors,setErrors]=useState({});
+
+  const sanitize=(text)=>{
+
+    return text.replace(/<[^>]*>?/gm,"");
+
+  };
+
+  const submit=(e)=>{
+
     e.preventDefault();
 
-    if (!patient || !doctor || !time || !purpose) {
-      alert("Please fill all fields");
+    let newErrors={};
+
+    if(!patient.trim())
+      newErrors.patient=true;
+
+    if(!doctor.trim())
+      newErrors.doctor=true;
+
+    if(!time)
+      newErrors.time=true;
+
+    if(!purpose.trim())
+      newErrors.purpose=true;
+
+    setErrors(newErrors);
+
+    if(Object.keys(newErrors).length>0)
       return;
-    }
 
-    const appointment = {
-      id: Date.now(),
-      patient,
-      doctor,
+    addAppointment({
+
+      id:Date.now(),
+
+      patient:sanitize(patient),
+
+      doctor:sanitize(doctor),
+
       time,
-      purpose,
-      date: selectedDate.toDateString(),
-    };
 
-    addAppointment(appointment);
+      purpose:sanitize(purpose),
 
-    console.log(
-      "[Analytics] User interacted with React Calendar Widget"
-    );
+      date:selectedDate.toDateString()
+
+    });
 
     setPatient("");
     setDoctor("");
     setTime("");
     setPurpose("");
+    setErrors({});
+
   };
 
-  return (
-    <div className="form-container">
-      <h2>Add Appointment</h2>
+  return(
 
-      <p className="selected-date">
-        Selected :
-        <strong> {selectedDate.toDateString()}</strong>
-      </p>
+<div className="form-container">
 
-      <form onSubmit={submit}>
-        <input
-          type="text"
-          placeholder="Patient Name"
-          value={patient}
-          onChange={(e) => setPatient(e.target.value)}
-        />
+<h2>Add Appointment</h2>
 
-        <input
-          type="text"
-          placeholder="Doctor Name"
-          value={doctor}
-          onChange={(e) => setDoctor(e.target.value)}
-        />
+<p className="selected-date">
 
-        <input
-          type="time"
-          value={time}
-          onChange={(e) => setTime(e.target.value)}
-        />
+Selected :
 
-        <textarea
-          placeholder="Treatment / Notes"
-          value={purpose}
-          onChange={(e) => setPurpose(e.target.value)}
-        />
+<strong>
 
-        <button type="submit">
-          Save Appointment
-        </button>
-      </form>
-    </div>
-  );
+{selectedDate.toDateString()}
+
+</strong>
+
+</p>
+
+<form onSubmit={submit}>
+
+<input
+className={errors.patient?"error":""}
+placeholder="Patient Name"
+value={patient}
+onChange={(e)=>setPatient(e.target.value)}
+aria-label="Patient Name"
+/>
+
+<input
+className={errors.doctor?"error":""}
+placeholder="Doctor Name"
+value={doctor}
+onChange={(e)=>setDoctor(e.target.value)}
+aria-label="Doctor Name"
+/>
+
+<input
+type="time"
+className={errors.time?"error":""}
+value={time}
+onChange={(e)=>setTime(e.target.value)}
+aria-label="Appointment Time"
+/>
+
+<textarea
+className={errors.purpose?"error":""}
+placeholder="Treatment / Notes"
+value={purpose}
+onChange={(e)=>setPurpose(e.target.value)}
+aria-label="Treatment"
+/>
+
+<button>
+
+Save Appointment
+
+</button>
+
+</form>
+
+</div>
+
+);
+
 }
 
 export default AppointmentForm;

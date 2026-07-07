@@ -216,3 +216,18 @@ body {
     box-shadow: 0 5px 15px rgba(0, 0, 0, .08);
     color: #64748b;
 }
+
+.loader {
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 32px;
+    font-weight: bold;
+    color: #2563eb;
+}
+
+.error {
+    border: 2px solid red !important;
+    background: #fff5f5;
+}
