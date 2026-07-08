@@ -79,8 +79,8 @@ function App() {
         <CalendarWidget
           selectedDate={selectedDate}
           setSelectedDate={setSelectedDate}
+          appointments={appointments}
         />
-
         <AppointmentForm
           selectedDate={selectedDate}
           addAppointment={addAppointment}
@@ -96,7 +96,15 @@ function App() {
 
       <footer className="footer">
 
-        © 2026 Dental Appointment Scheduler
+        <strong>🦷 Dental Appointment Scheduler</strong>
+
+        <p>
+          Designed with React • Vite • CSS
+        </p>
+
+        <span>
+          © 2026 All Rights Reserved
+        </span>
 
       </footer>
 

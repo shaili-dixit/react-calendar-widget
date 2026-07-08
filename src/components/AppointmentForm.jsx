@@ -59,6 +59,7 @@ function AppointmentForm({ selectedDate, addAppointment }) {
     setTime("");
     setPurpose("");
     setErrors({});
+    alert("✅ Appointment Saved Successfully!");
 
   };
 

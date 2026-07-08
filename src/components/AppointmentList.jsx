@@ -13,7 +13,7 @@ function AppointmentList({
 
   return (
     <div className="appointment-list">
-      <h2>Appointments</h2>
+      <h2> Appointments ({filteredAppointments.length})</h2>
 
       {filteredAppointments.length === 0 ? (
         <EmptyState />

@@ -4,7 +4,9 @@ return(
 
 <div className="loader">
 
-Loading Calendar...
+<div className="spinner"></div>
+
+<p>Loading Dashboard...</p>
 
 </div>
 

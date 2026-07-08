@@ -8,99 +8,99 @@ function CalendarWidget({
 
   const today = new Date();
 
-  const [currentMonth,setCurrentMonth]=useState(today.getMonth());
+  const [currentMonth, setCurrentMonth] = useState(today.getMonth());
 
-  const [currentYear,setCurrentYear]=useState(today.getFullYear());
+  const [currentYear, setCurrentYear] = useState(today.getFullYear());
 
-  const firstDay=new Date(
+  const firstDay = new Date(
     currentYear,
     currentMonth,
     1
   ).getDay();
 
-  const daysInMonth=new Date(
+  const daysInMonth = new Date(
     currentYear,
-    currentMonth+1,
+    currentMonth + 1,
     0
   ).getDate();
 
-  const monthName=new Date(
+  const monthName = new Date(
     currentYear,
     currentMonth
-  ).toLocaleString("default",{
-    month:"long"
+  ).toLocaleString("default", {
+    month: "long"
   });
 
-  const prevMonth=()=>{
+  const prevMonth = () => {
 
-    if(currentMonth===0){
+    if (currentMonth === 0) {
 
       setCurrentMonth(11);
 
-      setCurrentYear(currentYear-1);
+      setCurrentYear(currentYear - 1);
 
-    }else{
+    } else {
 
-      setCurrentMonth(currentMonth-1);
+      setCurrentMonth(currentMonth - 1);
 
     }
 
   };
 
-  const nextMonth=()=>{
+  const nextMonth = () => {
 
-    if(currentMonth===11){
+    if (currentMonth === 11) {
 
       setCurrentMonth(0);
 
-      setCurrentYear(currentYear+1);
+      setCurrentYear(currentYear + 1);
 
-    }else{
+    } else {
 
-      setCurrentMonth(currentMonth+1);
+      setCurrentMonth(currentMonth + 1);
 
     }
 
   };
 
-  const cells=[];
+  const cells = [];
 
-  for(let i=0;i<firstDay;i++){
+  for (let i = 0; i < firstDay; i++) {
 
-    cells.push(<div key={"e"+i}></div>);
+    cells.push(<div key={"e" + i}></div>);
 
   }
 
-  for(let day=1;day<=daysInMonth;day++){
+  for (let day = 1; day <= daysInMonth; day++) {
 
-    const currentDate=new Date(
+    const currentDate = new Date(
       currentYear,
       currentMonth,
       day
     );
 
-    const formatted=currentDate.toDateString();
+    const formatted = currentDate.toDateString();
 
-    const hasAppointment=appointments.some(
-      item=>item.date===formatted
+    const hasAppointment = appointments.some(
+      item => item.date === formatted
     );
 
-    const isToday=
-      day===today.getDate() &&
-      currentMonth===today.getMonth() &&
-      currentYear===today.getFullYear();
+    const isToday =
+      day === today.getDate() &&
+      currentMonth === today.getMonth() &&
+      currentYear === today.getFullYear();
 
-    const isSelected=
-      day===selectedDate.getDate() &&
-      currentMonth===selectedDate.getMonth() &&
-      currentYear===selectedDate.getFullYear();
+    const isSelected =
+      day === selectedDate.getDate() &&
+      currentMonth === selectedDate.getMonth() &&
+      currentYear === selectedDate.getFullYear();
 
     cells.push(
 
       <button
         key={day}
-        className={`day ${isSelected?"selected":""} ${isToday?"today":""}`}
-        onClick={()=>setSelectedDate(currentDate)}
+        className={`day ${isSelected ? "selected" : ""} ${isToday ? "today" : ""}`}
+        onClick={() => setSelectedDate(currentDate)}
       >
 
         {day}
@@ -115,59 +115,59 @@ function CalendarWidget({
 
   }
 
-  return(
+  return (
 
-<div className="calendar-container">
+    <div className="calendar-container">
 
-<div className="calendar-header">
+      <div className="calendar-header">
 
-<button onClick={prevMonth}>◀</button>
+        <button onClick={prevMonth}>◀</button>
 
-<h2>
+        <h2>
 
-{monthName} {currentYear}
+          {monthName} {currentYear}
 
-</h2>
+        </h2>
 
-<button onClick={nextMonth}>▶</button>
+        <button onClick={nextMonth}>▶</button>
 
-</div>
+      </div>
 
-<div className="weekdays">
+      <div className="weekdays">
 
-<div>Sun</div>
-<div>Mon</div>
-<div>Tue</div>
-<div>Wed</div>
-<div>Thu</div>
-<div>Fri</div>
-<div>Sat</div>
+        <div>Sun</div>
+        <div>Mon</div>
+        <div>Tue</div>
+        <div>Wed</div>
+        <div>Thu</div>
+        <div>Fri</div>
+        <div>Sat</div>
 
-</div>
+      </div>
 
-<div className="calendar-grid">
+      <div className="calendar-grid">
 
-{cells}
+        {cells}
 
-</div>
+      </div>
 
-<div className="selected-info">
+      <div className="selected-info">
 
-Selected Date
+        Selected Date
 
-<br/>
+        <br />
 
-<strong>
+        <strong>
 
-{selectedDate.toDateString()}
+          {selectedDate.toDateString()}
 
-</strong>
+        </strong>
 
-</div>
+      </div>
 
-</div>
+    </div>
 
-);
+  );
 
 }
 

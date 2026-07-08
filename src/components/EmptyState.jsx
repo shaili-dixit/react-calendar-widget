@@ -1,11 +1,15 @@
 function EmptyState() {
   return (
     <div className="empty-state">
-      <h3>No Appointments</h3>
+
+      <div className="empty-icon">📅</div>
+
+      <h3>No Appointments Scheduled</h3>
 
       <p>
-        There are no appointments for this date.
+        Select a date and add your first appointment.
       </p>
+
     </div>
   );
 }
